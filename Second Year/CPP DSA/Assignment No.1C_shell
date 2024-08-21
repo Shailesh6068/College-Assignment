@@ -1,0 +1,68 @@
+#include<iostream>
+using namespace std;
+class student
+{
+    string name;
+    int roll_no;
+    float sgpa;
+
+    public:
+    void read();
+    void display();
+    void insertion();
+
+    friend void shell_sort(student[20],int n);
+};
+void student::read()
+{
+    cout<<"Enter the name :";
+    cin>>name;
+    cout<<"Roll No:";
+    cin>>roll_no;
+    cout<<"Enter the sgpa:";
+    cin>>sgpa; 
+}
+void student::display()
+{
+    cout<<"Name of the student:"<<name<<endl;
+    cout<<"Roll No:"<<roll_no<<endl;
+    cout<<"sgpa:"<<sgpa<<endl;   
+}
+void shell_sort(student s[20], int n)
+{
+    for (int gap = n/2 ;gap >= 1 ; gap = gap/2 )
+    {
+        for(int i = gap ; i < n ; i++)   //scope of element declared in for loop only reamin in the this loop outside the this loop it is undeclared .
+        {
+            student X = s[i];
+            int j = i - gap;
+            while (j >=0 && s[j].roll_no > X.roll_no)
+            {
+                s[j+gap] = s[j];
+                j = j - gap;
+            }
+        s[j+gap ] = X;
+        }
+    } 
+}
+int main()
+{
+    int n;
+    student sobj[20];
+    cout<<"Enter the Number of Student :";
+    cin>>n;
+    for (int i = 0; i < n; i++)
+    {
+        sobj[i].read();   
+    }
+
+    shell_sort(sobj ,n);
+
+    cout<<endl;
+    cout<<"Order According to Roll No. :"<<endl;
+    for (int i = 0; i < n; i++)
+    {
+        sobj[i].display();       
+    }
+    return 0;
+}
