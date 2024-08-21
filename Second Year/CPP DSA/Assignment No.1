@@ -1,1 +1,53 @@
-https://www.youtube.com/watch?v=ogjf7ORKfd8
+#include<iostream>
+using namespace std;
+struct stud
+{
+    int roll_No ;
+    string name;
+    float sgpa;
+   
+};
+class student
+{
+    public:
+    struct stud s[20];
+    int n;
+    void read();
+    void display();
+    void insertion();
+   
+};
+void student::read()
+{
+    cout<<"Enter the number of student:"<<endl;
+    cin>>n;
+    for(int i=0 ; i<n ;i++)
+    {
+        cout<<"Enter the name :"<<endl;
+        cin>>s[i].name;
+        cout<<"Roll No:"<<endl;
+        cin>>s[i].roll_No;
+        cout<<"Enter the sgpa:"<<endl;
+        cin>>s[i].sgpa;
+       
+    }
+   
+}
+void student::display()
+{
+    for(int i=0 ; i<n;i++)
+    {
+        cout<<"Number of the student:"<<s[1].name<<endl;
+        cout<<"Roll No:"<<s[1].roll_No<<endl;
+        cout<<"sgpa:"<<s[i].sgpa<<endl;
+    }
+   
+}
+int main()
+{
+   
+    student s1;
+    s1.read();
+    s1.display();
+    return 0;
+}
