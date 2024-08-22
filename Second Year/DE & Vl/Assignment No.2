@@ -1,0 +1,87 @@
+list = []                    #declare list as global
+def number():
+    #list = []                           if we write list here then we cannot access in the other function
+    n = int(input("Enter the size :"))
+    for i in range(0,n):
+        list.append(int(input()))
+
+def access():
+    n = len(list)
+    a = int(input("Enter the index of number to see number :"))
+    if a < n:
+        print(list[a])
+    else:
+        print("This index number is not exist.")
+
+    #pass               : jar aapan pass lihale tari code run hoto
+
+def add():
+    print("1:at end     "
+          "2:at given index     "
+        )
+
+    a = int(input("Enter Choice :"))
+    n = int(input("Enter number to add :"))
+    if a == 1:
+        list.append(n)
+        
+    elif a == 2:
+        w = int(input("Enter the index number :"))
+        list.insert(w,n)
+
+    print(list)
+        
+def remove():
+    print("1:From index number          "
+          "2:From number" 
+        )
+
+    a = int(input("Enter Choice :"))
+    if a == 1:
+        w = int(input("Enter index number :"))
+        list.pop(w)
+
+    elif a == 2:
+        n = int(input("Enter number :"))
+        list.remove(n)
+        
+    print(list)
+    
+def member():
+    n = int(input("Enter the number :"))
+    if n in list:
+        print(f"{n} is a member of list.")
+    else:
+        print(f"{n} is not member of list.")
+    
+print("1:Enter the number\n"   # when"1:Enter the number\n" , "2:Access the number\n" 
+      "2:Access the number\n"  #give here coma the starting of 2 one extra space is print
+      "3:Add number in list\n"
+      "4:Remove element\n"
+      "5:Check the number is present\n"
+      "6:Exit\n"
+     )
+
+while True:
+    a = int(input("Enter the choice :"))
+    match a:
+        case 1:
+            number()
+
+        case 2:
+            access()
+
+        case 3:
+            add()
+
+        case 4:
+            remove()
+
+        case 5:
+            member()
+
+        case 6:
+            break
+
+        case _ : 
+            print("Enter the correct choice.")
