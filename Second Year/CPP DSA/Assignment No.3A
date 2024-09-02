@@ -1,55 +1,61 @@
 #include <iostream>
 using namespace std;
-class song
+class song                                  // behave as a node
 {
-    string title;
+    string title;    
     string singer;
-public:
-    song *next;
+
+    public:
+
+    song *next;                             // make the next of node
     song() 
-    { next = NULL; 
+    { next = NULL;                          //store the address of next
     }
 
-    void read() 
+    void read()                             // get input
     {
-        cout << "Enter song title: ";
+        cout << "Enter song title: ";      
         cin.ignore();
         getline(cin,title);
         cout << "Enter singer name: ";
         getline(cin,singer);
     }
 
-    void display() 
+    void display()                          //To display                         
     {
-        cout << "Title :" << title << ", Singer :" << singer << endl;
+        cout << "Title :" << title <<"         Singer :" << singer << endl;
     }
 
-    string getTitle() 
+    string getTitle()                       // give the tittle
     { 
         return title; 
     }
     
-    void setSinger(const string& newSinger) 
+    string get_singer()                     // give singer
+    {
+        return singer;
+    }
+
+    void setSinger(string newSinger)         // Pass by value :-take extra memory for newSinger
     { 
         singer = newSinger;
     }
     
-    void setTittle(const string& new_tittle) 
-    { 
+    void setTittle(const string& new_tittle) //Pass by Referrence:- Does not take extra space
+    {                                        //const :- state that the value is constant.means there is no change in
         title = new_tittle;
     }
 };
-class playlist 
+class playlist                               // Behave as Linked list
 {
-    song *head;
-
-public:
-    playlist() 
+    song *head;                              // To store starting the address of first nnode                                           //
+    public:                                  // and indicate first node
+    playlist()                               // initialize head as NULL means empty
     { 
         head = NULL; 
     }
     
-    void addsong() {
+    void insert_end() {
         song *nn = new song;
         nn->read();
 
@@ -63,7 +69,7 @@ public:
         cout << "Song added to the playlist." << endl;
     }
 
-    void insertAtBeginning() 
+    void insert_begin() 
     {
         song *temp = new song;
         temp->read();
@@ -79,7 +85,8 @@ public:
         }
         cout << "Song inserted at the beginning of the playlist." << endl;
     }
-    void displayplaylist() 
+
+    void display_playlist() 
     {
         if (head == NULL) 
         {
@@ -93,7 +100,8 @@ public:
             }
         }
     }
-    void deletesong() 
+    
+    void delete_song() 
     {
         if (head == NULL) 
         {
@@ -127,7 +135,8 @@ public:
             cout << "Song not found in the playlist." << endl;
         }
     }
-    void insertAfter() 
+
+    void insert_at_kposition() 
     {
         string afterTitle;
         cout << "Enter the title of the song to insert after: ";
@@ -185,102 +194,140 @@ public:
         string old_tittle;
         string new_tittle;
         
-        cout<<"Enter the tittle"<<endl;
+        cout<<"Enter the old tittle:"<<endl;
         cin.ignore();
         getline(cin,old_tittle);
         
         cout<<"Enter the new tittle:";
         getline(cin,new_tittle);
-        
+        int flag = 0;
         while(temp != NULL)
         {
             if(temp->getTitle() == old_tittle)
             {
+                flag = 1;
                 temp->setTittle(new_tittle);
             }
             temp = temp->next;
-        }
-        
-            
-    }
-    };
-    void modify()
-    {   
-        int n;
-        do
+        } 
+
+        if(flag == 1)
         {
-            cout << "1.Change Tittle\n";
-            cout << "2.Change singer Name\n";
-            cout << "3.Exit\n";
-            cout<<"Select the choice:"<<endl;
-            cin>>n;
-            
-            switch(n)
+            cout<<"Tittle Changed Successfully....."<<endl;
+        }
+        else
+        {
+            cout<<"Missing Tittle,Please Write Correct!"<<endl;
+        }
+    }
+
+    void changesinger()
+    {
+        string old_singer;
+        string new_singer;
+        cout<<"Enter the old singer :";
+        cin>>old_singer;
+        cout<<"Enter the new singer :";
+        cin>>new_singer;
+        int flag = 0;
+        song* temp = head;
+        while (temp != NULL)
+        {
+            if(temp->get_singer() == old_singer)
+            {
+                flag = 1;
+                temp->setSinger(new_singer);
+            }
+            temp = temp->next;
+        }
+
+        if(flag == 1)
+        {
+            cout<<"Singer Changed Successfully....."<<endl;
+        }
+        else
+        {
+            cout<<"Missing Singer,Please Write Correct!"<<endl;
+        }
+    }
+    
+    void update()
+    {   
+        int c;
+        do
+        {  
+            cout<<"update :- Select the choice:"<<endl;
+            cout<<"1.Tittle         2.Singer        3.Exit"<<endl;
+            cin>>c;   
+            switch(c)
             {
                 case 1:
                     changetittle();
-                
+                    break;
+
                 case 2:
-                    cout<<"a";
+                    changesinger();
+                    break;
                 
+                default:
+                cout<<"Enter correct choice."<<endl;
             }
         }
-        while(n!=3);
-        
-        
+        while(c!=3);       
     }
 };
-
-int main() {
+int main() 
+{
     playlist myPlaylist;
     int choice;
 
-    do 
-    {
         cout << "\nPlaylist of Song:\n";
         cout << "1.Add song at End\n";
-        cout << "2.Insert song at beginning\n";
+        cout << "2.Add song at beginning\n";
         cout << "3.Display playlist\n";
         cout << "4.Delete the song\n";
         cout << "5.Insert song after another\n";
-        cout << "6.Update song\n";
-        cout << "7.Modify Information\n";
-        cout << "8.Exit\n";
-        cout << "Enter your choice: ";
+        cout << "6.Update Information\n";
+        cout << "7.Exit\n";
+        
+    do 
+    {   
+        cout <<"Profile :- Enter your choice: ";
         cin >> choice;
-       
 
         switch (choice) {
             case 1:
-                myPlaylist.addsong();
+                myPlaylist.insert_end();
                 break;
+
             case 2:
-                myPlaylist.insertAtBeginning();
+                myPlaylist.insert_begin();
                 break;
+
             case 3:
-                myPlaylist.displayplaylist();
+                myPlaylist.display_playlist();
                 break;
+
             case 4:
-                myPlaylist.deletesong();
+                myPlaylist.delete_song();
                 break;
+                
             case 5:
-                myPlaylist.insertAfter();
+                myPlaylist.insert_at_kposition();
                 break;
+
             case 6:
-                myPlaylist.updatesong();
+                myPlaylist.update();
                 break;
                 
             case 7:
-                myplaylist.modify();
-                
-            case 8:
-                cout << "Exiting..." << endl;
+                cout << "Exit.." << endl;
                 break;
 
             default:
                 cout << "Invalid choice, please try again." << endl;
         }
-    } while (choice != 8);
+    } while (choice != 7);
 
     return 0;
 }
