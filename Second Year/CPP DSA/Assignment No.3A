@@ -1,0 +1,286 @@
+#include <iostream>
+using namespace std;
+class song
+{
+    string title;
+    string singer;
+public:
+    song *next;
+    song() 
+    { next = NULL; 
+    }
+
+    void read() 
+    {
+        cout << "Enter song title: ";
+        cin.ignore();
+        getline(cin,title);
+        cout << "Enter singer name: ";
+        getline(cin,singer);
+    }
+
+    void display() 
+    {
+        cout << "Title :" << title << ", Singer :" << singer << endl;
+    }
+
+    string getTitle() 
+    { 
+        return title; 
+    }
+    
+    void setSinger(const string& newSinger) 
+    { 
+        singer = newSinger;
+    }
+    
+    void setTittle(const string& new_tittle) 
+    { 
+        title = new_tittle;
+    }
+};
+class playlist 
+{
+    song *head;
+
+public:
+    playlist() 
+    { 
+        head = NULL; 
+    }
+    
+    void addsong() {
+        song *nn = new song;
+        nn->read();
+
+        if (head == NULL) {
+            head = nn;
+        } else {
+            song *cn;
+            for (cn = head; cn->next != NULL; cn = cn->next);
+            cn->next = nn;
+        }
+        cout << "Song added to the playlist." << endl;
+    }
+
+    void insertAtBeginning() 
+    {
+        song *temp = new song;
+        temp->read();
+
+        if(head == NULL) 
+        {
+            head = temp;
+        }
+        else 
+        {
+            temp->next = head;
+            head = temp;
+        }
+        cout << "Song inserted at the beginning of the playlist." << endl;
+    }
+    void displayplaylist() 
+    {
+        if (head == NULL) 
+        {
+            cout << "Playlist is empty." << endl;
+        } 
+        else 
+        {
+            cout << "Playlist:" << endl;
+            for (song *cn = head; cn != NULL; cn = cn->next) {
+                cn->display();
+            }
+        }
+    }
+    void deletesong() 
+    {
+        if (head == NULL) 
+        {
+            cout << "Playlist is empty, nothing to delete." << endl;
+            return;
+        }
+
+        string delTitle;
+        cout << "Enter the title of the song to delete: ";
+        cin>>delTitle;
+
+        song *prev = NULL;
+        int flag = 0;
+        for (song *cn = head; cn != NULL; prev = cn, cn = cn->next) {
+            if (cn->getTitle() == delTitle) 
+            {
+                flag = 1;
+                if (prev == NULL) {
+                    head = cn->next;
+                } else {
+                    prev->next = cn->next;
+                }
+                delete cn;
+                cout << "Song deleted from the playlist." << endl;
+                break;
+            }
+        }
+
+        if (flag == 0) 
+        {
+            cout << "Song not found in the playlist." << endl;
+        }
+    }
+    void insertAfter() 
+    {
+        string afterTitle;
+        cout << "Enter the title of the song to insert after: ";
+        cin>>afterTitle;
+
+        bool found = false;
+
+        for (song *cn = head; cn != NULL; cn = cn->next) 
+        {
+            if (cn->getTitle() == afterTitle) 
+            {
+                found = true;
+                song *nn = new song;
+                nn->read();
+                nn->next = cn->next;
+                cn->next = nn;
+                cout << "Song inserted after " << afterTitle << "." << endl;
+                break;
+            }
+        }
+
+        if (!found) {
+            cout << "Song with title '" << afterTitle << "' not found." << endl;
+        }
+    }
+
+    void updatesong() 
+    {
+        string title, newSinger;
+        cout << "Enter the title of the song to update: ";
+        cin>>title;
+
+        bool found = false;
+
+        for (song *cn = head; cn != NULL; cn = cn->next) {
+            if (cn->getTitle() == title) {
+                found = true;
+                cout << "Enter new singer name: ";
+                cin.ignore();
+                getline(cin, newSinger);
+                cn->setSinger(newSinger);
+                cout << "Song updated successfully." << endl;
+                break;
+            }
+        }
+
+        if (!found) {
+            cout << "Song with title '" << title << "' not found." << endl;
+        }
+    }
+    
+    void changetittle()
+    {
+        song* temp = head;
+        string old_tittle;
+        string new_tittle;
+        
+        cout<<"Enter the tittle"<<endl;
+        cin.ignore();
+        getline(cin,old_tittle);
+        
+        cout<<"Enter the new tittle:";
+        getline(cin,new_tittle);
+        
+        while(temp != NULL)
+        {
+            if(temp->getTitle() == old_tittle)
+            {
+                temp->setTittle(new_tittle);
+            }
+            temp = temp->next;
+        }
+        
+            
+    }
+    };
+    void modify()
+    {   
+        int n;
+        do
+        {
+            cout << "1.Change Tittle\n";
+            cout << "2.Change singer Name\n";
+            cout << "3.Exit\n";
+            cout<<"Select the choice:"<<endl;
+            cin>>n;
+            
+            switch(n)
+            {
+                case 1:
+                    changetittle();
+                
+                case 2:
+                    cout<<"a";
+                
+            }
+        }
+        while(n!=3);
+        
+        
+    }
+};
+
+int main() {
+    playlist myPlaylist;
+    int choice;
+
+    do 
+    {
+        cout << "\nPlaylist of Song:\n";
+        cout << "1.Add song at End\n";
+        cout << "2.Insert song at beginning\n";
+        cout << "3.Display playlist\n";
+        cout << "4.Delete the song\n";
+        cout << "5.Insert song after another\n";
+        cout << "6.Update song\n";
+        cout << "7.Modify Information\n";
+        cout << "8.Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+       
+
+        switch (choice) {
+            case 1:
+                myPlaylist.addsong();
+                break;
+            case 2:
+                myPlaylist.insertAtBeginning();
+                break;
+            case 3:
+                myPlaylist.displayplaylist();
+                break;
+            case 4:
+                myPlaylist.deletesong();
+                break;
+            case 5:
+                myPlaylist.insertAfter();
+                break;
+            case 6:
+                myPlaylist.updatesong();
+                break;
+                
+            case 7:
+                myplaylist.modify();
+                
+            case 8:
+                cout << "Exiting..." << endl;
+                break;
+
+            default:
+                cout << "Invalid choice, please try again." << endl;
+        }
+    } while (choice != 8);
+
+    return 0;
+}
