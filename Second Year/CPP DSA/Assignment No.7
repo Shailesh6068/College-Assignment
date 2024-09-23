@@ -1,0 +1,125 @@
+#include<iostream>
+using namespace std;
+class node
+{
+    public:
+    node* next;
+    string page;
+    node()
+    {
+        next = NULL;
+        page = "No Any page is Open.";
+    }
+    void read()
+    {
+        cout<<"Enter the new page :";
+        cin.ignore();
+        getline(cin,page);
+    }
+};
+class BrowserHistory
+{
+    public:
+    node* top;
+    BrowserHistory()
+    {
+        top = NULL;
+    }
+    void is_empty()
+    {
+        if(top == NULL)
+        {
+            cout<<"No history is present"<<endl;
+        }
+    }
+    void newpage()
+    {
+        node* new_node = new node;
+        new_node->read();
+        if (top == NULL)
+        {
+            top = new_node;
+            return;
+        }
+        new_node->next = top;
+        top = new_node;
+    }
+
+    void display()
+    {
+        node* temp = top;
+        while(temp != NULL)
+        {
+            cout<<temp->page<<endl;
+            temp = temp->next;
+        }
+    }
+
+    void delete_page()
+    {
+        if(top == NULL)
+        {
+            cout<<"No history present."<<endl;
+            return;
+        }
+        node* temp = top;
+        top = top->next;
+        delete temp;
+    }
+    
+    void go_to_back_page()
+    {
+        if(top == NULL)
+        {
+            cout<<"No history present."<<endl;
+            return;
+        }
+        node* temp = top;
+        temp = temp->next;
+        cout<<temp->page<<endl;
+    }
+};
+int main()
+{
+    int n;
+    BrowserHistory br;
+    cout<<"The Choices are:"<<endl;
+    cout<<"1:Add New page."<<endl
+        <<"2:check is History is Empty or Not."<<endl
+        <<"3:Delete page."<<endl
+        <<"4:Go to back page."<<endl
+        <<"5:Show History."<<endl
+        <<"6.Close all page and go to Desktop."<<endl;
+    while(true)
+    {
+        cout<<"Enter the choice :";
+        cin>>n;
+        switch(n)
+        {
+            case 1:
+                br.newpage();
+                break;
+
+            case 2:
+                br.is_empty();
+                break;
+
+            case 3:
+                br.delete_page();
+                break;
+
+            case 4:
+                br.go_to_back_page();
+                break;
+
+            case 5:
+                br.display();
+                break;
+
+            case 6:
+                break;
+        }
+        
+    }
+    return 0;
+}
