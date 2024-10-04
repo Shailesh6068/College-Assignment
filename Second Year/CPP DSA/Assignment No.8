@@ -1,0 +1,106 @@
+#include<iostream>
+#define n 100
+using namespace std;
+class restaurant
+{
+
+  string name;
+  int time;
+ 
+  public:
+  int front;
+  int rear;
+  string arr[n];
+  
+      restaurant()
+      {
+        rear = -1;
+        front = -1;
+      }
+
+      void push()
+      {
+         if(rear == n-1)
+         {
+             cout<<"Waitlist is full."<<endl;
+             return;
+         }
+         if(front == -1)
+         {
+             front = 0;
+         }
+         rear++;
+         cout<<"Enter the customer name :"<<endl;
+         cin>>name;
+         arr[rear] = name; 
+      }
+  
+      void seatparte()
+      {
+          if(front == -1 || front > rear)
+          {
+              cout<<"Waitlist is empty."<<endl;
+              return;
+          }
+          string seatparty = arr[front];
+          front++;
+          cout<<"Seated Party :"<<seatparty<<endl;
+          if(front > rear)
+          {
+              front = rear = -1;
+          }
+      }
+  
+      void display()
+      { 
+          if(front == -1)
+          {
+              cout<<"No Waitlist."<<endl;
+          }
+          int Front_1 = front;
+          for(int i = Front_1; i <= rear ; i++ )
+          {
+              cout<<arr[i]<<endl;
+          }
+      }
+};
+int main()
+{
+   restaurant rt;
+    
+    cout<<"1:Enter the customer Name."<<endl
+        <<"2:Take next Customer."<<endl
+        <<"3:Display customer information."<<endl
+        <<"4:Exit.";
+        
+    int ch;
+    int a = 0;
+    while(a == 0)
+    {
+        cout<<"Enter the Choice :";
+        cin>>ch;
+        
+        switch(ch)
+        {
+            case 1:
+                rt.push();
+                break;
+                
+            case 2:
+                rt.seatparte();
+                break;
+                
+            case 3:
+                rt.display();
+                break;
+                
+            case 4:
+                a = 1 ;
+                break;
+            
+        }
+        
+        
+    } 
+    return 0;
+}
