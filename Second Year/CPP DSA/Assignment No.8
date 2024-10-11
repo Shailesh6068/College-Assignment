@@ -72,24 +72,46 @@ int main()
     cout<<"Enter the string :";
     cin>>s;
     char ch;
-    for(int i = 0; i < s.size() ; i++)
-    {
-        ch = s[i];
-        if(isdigit(ch))
+    char c;
+    int count_num = 0;
+    int count_ope = 0;
+    
+    for(int i = 0 ;i<s.size() ;i++)
+    {   
+        c = s[i];
+        if(isdigit(c))
         {
-            st.push(ch-'0');
+            count_num++;
         }
-        else 
+        else
         {
-            int v2 = st.get_top();  
-            st.pop();
-            int v1 = st.get_top();
-            st.pop();
-            st.push(operation(v1 , v2 , ch));
+            count_ope++;
         }
     }
-    
-    cout<<"The Answer is : "<<st.get_top();
+    if(count_ope == count_num-1)
+    {
+        for(int i = 0; i < s.size() ; i++)
+        {
+            ch = s[i];
+            if(isdigit(ch))
+            {
+                st.push(ch-'0');
+            }
+            else 
+            {
+                int v2 = st.get_top();  
+                st.pop();
+                int v1 = st.get_top();
+                st.pop();
+                st.push(operation(v1 , v2 , ch));
+            }
+        }
+        cout<<"The Answer is : "<<st.get_top();
+    }
+    else
+    {
+        cout<<"Incorect Expression."<<endl;
+    }
     return 0;
 
 }
