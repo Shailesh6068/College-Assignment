@@ -1,0 +1,95 @@
+#include<iostream>
+using namespace std;
+class stack
+{   
+    public:
+    int top;
+    int curr_size;
+    int arr[50];
+
+    stack()
+    {
+        top = -1;
+        curr_size = 0;
+    }    
+
+    void push(int data)
+    {
+        top++;
+        arr[top] = data;       
+        curr_size++;
+    }
+
+    void pop()
+    {
+        if(top == -1 )
+        {
+            cout<<"is Empty."<<endl;
+            return;
+        }
+        top--;
+    }
+
+    int get_top()
+    {
+        return arr[top];
+    }
+    
+    bool is_empty()
+    {
+        return top == -1;
+    }
+};
+int operation(int v1,int v2,char op)
+{
+    switch (op)
+    {
+        case '+':
+            return v1+v2;
+            break;
+
+        case '-': 
+            return v1-v2;
+            break;  
+
+        case '*':
+            return v1*v2;
+            break;
+
+        case '/':
+            return v1/v2;
+            break;
+
+        default:
+            cout<<"Incorrect Operator."<<endl;
+    }
+    return -1;
+}
+int main()
+{   
+    string s;
+    stack st;
+    cout<<"Enter the string :";
+    cin>>s;
+    char ch;
+    for(int i = 0; i < s.size() ; i++)
+    {
+        ch = s[i];
+        if(isdigit(ch))
+        {
+            st.push(ch-'0');
+        }
+        else 
+        {
+            int v2 = st.get_top();  
+            st.pop();
+            int v1 = st.get_top();
+            st.pop();
+            st.push(operation(v1 , v2 , ch));
+        }
+    }
+    
+    cout<<"The Answer is : "<<st.get_top();
+    return 0;
+
+}
