@@ -1,3 +1,19 @@
+/*** 
+Name - Shailesh Pawar
+Roll no - SYCOD230
+PRN - 123B1B230
+Div - D(1)
+
+Assignment No : 7
+Tittle : Implement a browser history management system using a stack data structure to track the user's 
+browsing history. The system should support the following functionalities:
+a. Add visited page
+b. Navigate back
+c. View current page
+d. Check if history is empty or not
+Assume no upper bound on number of pages visite
+
+*/
 #include<iostream>
 using namespace std;
 class node
@@ -25,11 +41,16 @@ class BrowserHistory
     {
         top = NULL;
     }
+
     void is_empty()
     {
         if(top == NULL)
         {
             cout<<"No history is present"<<endl;
+        }
+        else
+        {
+            cout<<"History is availabel...\n";
         }
     }
     void newpage()
@@ -55,19 +76,17 @@ class BrowserHistory
         }
     }
 
-    void delete_page()
+    void Curr_page()
     {
         if(top == NULL)
         {
             cout<<"No history present."<<endl;
             return;
         }
-        node* temp = top;
-        top = top->next;
-        delete temp;
+        cout<<top->page<<endl;
     }
     
-    void go_to_back_page()
+    void navigate_back()
     {
         if(top == NULL)
         {
@@ -75,8 +94,9 @@ class BrowserHistory
             return;
         }
         node* temp = top;
-        temp = temp->next;
-        cout<<temp->page<<endl;
+        top  = top->next;
+        cout<<"Navigated Back....\n";
+        delete temp;
     }
 };
 int main()
@@ -86,8 +106,8 @@ int main()
     cout<<"The Choices are:"<<endl;
     cout<<"1:Add New page."<<endl
         <<"2:check is History is Empty or Not."<<endl
-        <<"3:Delete page."<<endl
-        <<"4:Go to back page."<<endl
+        <<"3:Show Current Page."<<endl
+        <<"4:Navigate back."<<endl
         <<"5:Show History."<<endl
         <<"6.Close all page and go to Desktop."<<endl;
     while(true)
@@ -105,11 +125,11 @@ int main()
                 break;
 
             case 3:
-                br.delete_page();
+                br.Curr_page();
                 break;
 
             case 4:
-                br.go_to_back_page();
+                br.navigate_back();
                 break;
 
             case 5:
@@ -117,7 +137,7 @@ int main()
                 break;
 
             case 6:
-                break;
+                return 0;
         }
         
     }
