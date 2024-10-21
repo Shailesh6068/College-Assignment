@@ -1,0 +1,92 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+#define SIZE 10
+
+class Employee {
+    int EID;
+    string name;
+    int salary;
+
+public:
+    void read() {
+        cout << "Enter Employee ID: ";
+        cin >> EID;
+        cout << "Enter Name: ";
+        cin >> name;
+        cout << "Enter Salary: ";
+        cin >> salary;
+    }
+
+    int getId() const {
+        return EID;
+    }
+
+    void display() const {
+        cout << "Employee ID: " << EID << ", Name: " << name << ", Salary: " << salary << endl;
+    }
+};
+
+class HashTable {
+    Employee e[SIZE];
+    bool flag[SIZE] = {false};  // Use boolean for better clarity
+
+public:
+    void insert() {
+        Employee newR;
+        newR.read();
+        int empId = newR.getId();
+        int pos = empId % SIZE;
+
+        if (!flag[pos]) {
+            e[pos] = newR;
+            flag[pos] = true;
+        } else {
+            for (int i = 0; i < SIZE; i++) {
+                pos = (pos + 1) % SIZE;
+                if (!flag[pos]) {
+                    e[pos] = newR;
+                    flag[pos] = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    void display() const {
+        cout << "Employees in Hash Table:" << endl;
+        for (int i = 0; i < SIZE; i++) {
+            if (flag[i]) {
+                e[i].display();
+            }
+            
+    }
+};
+
+int main() {
+    HashTable empDB;
+    int choice;
+
+    do {
+        cout << "\nMenu:\n1. Insert Employee\n2. Display Employees\n3. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                empDB.insert();
+                break;
+            case 2:
+                empDB.display();
+                break;
+            case 3:
+                cout << "Exiting..." << endl;
+                break;
+            default:
+                cout << "Invalid choice! Please try again." << endl;
+        }
+    } while (choice != 3);
+
+    return 0;
+}
