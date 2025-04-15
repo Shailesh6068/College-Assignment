@@ -1,0 +1,41 @@
+A new Company "TechNest" wants to set up its employee database.
+Create a new user tech_admin with all privileges
+Create a table employees with columns:id,name ,age , department,hire ,hire_date
+insert 5 records into the employees table 
+use describe to display the structure of the employees table 
+use truncate to remove all records from the table
+
+-- 1. Create a new user with all privileges
+CREATE USER 'tech_admin'@'localhost' IDENTIFIED BY 'StrongP@ssw0rd';
+GRANT ALL PRIVILEGES ON *.* TO 'tech_admin'@'localhost' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
+-- 2. Create a new database
+CREATE DATABASE TechNestDB_230;
+
+-- 3. Use the database
+USE TechNestDB;
+
+-- 4. Create the employees table
+CREATE TABLE employees_230(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100),
+    age INT,
+    department VARCHAR(50),
+    hire_date DATE
+);
+
+-- 5. Insert 5 records into employees table
+INSERT INTO employees_230(name, age, department, hire_date) VALUES
+('Aman', 29, 'Engineering', '2022-03-15'),
+('Raj', 35, 'Marketing', '2021-07-01'),
+('Yash', 42, 'Finance', '2019-11-20'),
+('Vaibhav', 30, 'HR', '2023-01-10'),
+('Harsh', 27, 'Sales', '2024-06-05');
+
+-- 6. Describe the structure of the employees table
+DESCRIBE employees_230;
+
+-- 7. Truncate the table (remove all records)
+TRUNCATE TABLE employees_230;
+
