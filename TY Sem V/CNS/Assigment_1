@@ -1,0 +1,62 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+
+class BitCalculation {
+public:
+    vector<int> data;
+    vector<int> div;
+    vector<int> dataCopy;
+    int extra;
+
+    BitCalculation(vector<int> d, vector<int> dv) {
+        data = d;
+        div = dv;
+        extra = div.size() - 1;
+        // Copy data and add extra zeros
+        for (int i = 0; i < data.size(); i++) {
+            dataCopy.push_back(data[i]);
+        }
+        for (int i = 0; i < extra; i++) {
+            dataCopy.push_back(0); // Padding zeros
+        }
+    }
+
+    void calculateCRC() {
+        // Simple CRC using one loop over dataCopy
+        for (int i = 0; i <= data.size() - 1; i++) {
+            if (dataCopy[i] == 1) {
+                // Perform XOR with divisor
+                for (int j = 0; j < div.size(); j++) {
+                    dataCopy[i + j] = dataCopy[i + j] ^ div[j];
+                }
+            }
+        }
+
+        // Extract remainder
+        cout << "CRC bits: ";
+        for (int i = data.size(); i < dataCopy.size(); i++) {
+            cout << dataCopy[i];
+        }
+        cout << endl;
+
+        // Final codeword
+        cout << "Final codeword: ";
+        for (int i = 0; i < data.size(); i++) {
+            cout << data[i];
+        }
+        for (int i = data.size(); i < dataCopy.size(); i++) {
+            cout << dataCopy[i];
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    vector<int> data = {1, 0, 0, 1};
+    vector<int> div = {1, 0, 1, 1};
+
+    BitCalculation B(data, div);
+    B.calculateCRC();
+    return 0;
+}
