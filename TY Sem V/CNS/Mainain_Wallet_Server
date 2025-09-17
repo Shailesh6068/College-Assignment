@@ -1,0 +1,42 @@
+import java.io.*;
+import java.net.*;
+
+public class WalletServer {
+    private static int balance = 1000; // example balance
+
+    public static void main(String[] args) throws IOException {
+        ServerSocket serverSocket = new ServerSocket(5000);
+        System.out.println("Server started. Waiting for client...");
+
+        Socket clientSocket = serverSocket.accept();
+        System.out.println("Client connected.");
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+
+        String request;
+        while ((request = in.readLine()) != null) {
+            if (request.equalsIgnoreCase("CHECK_BALANCE")) {
+                out.println("Balance: " + balance);
+            } else if (request.startsWith("ADD_MONEY")) {
+                int amount = Integer.parseInt(request.split(" ")[1]);
+                balance += amount;
+                out.println("Money added. New balance: " + balance);
+            } else if (request.startsWith("MAKE_PAYMENT")) {
+                int amount = Integer.parseInt(request.split(" ")[1]);
+                if (balance >= amount) {
+                    balance -= amount;
+                    out.println("Payment successful. New balance: " + balance);
+                } else {
+                    out.println("Insufficient balance.");
+                }
+            } else if (request.equalsIgnoreCase("EXIT")) {
+                out.println("Goodbye!");
+                break;
+            } else {
+                out.println("Invalid command.");
+            }
+        }
+
+    }
+}
