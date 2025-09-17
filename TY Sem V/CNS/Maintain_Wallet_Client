@@ -1,0 +1,35 @@
+import java.io.*;
+import java.net.*;
+import java.util.Scanner;
+
+public class WalletClient {
+    public static void main(String[] args) throws IOException {
+        Socket socket = new Socket("localhost", 5000);
+        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+
+        Scanner scanner = new Scanner(System.in);
+        String userInput;
+
+        System.out.println("Connected to Wallet Server.");
+        System.out.println("Commands: CHECK_BALANCE, ADD_MONEY <amount>, MAKE_PAYMENT <amount>, EXIT");
+
+        while (true) {
+            System.out.print("Enter command: ");
+            userInput = scanner.nextLine();
+            out.println(userInput);
+
+            String response = in.readLine();
+            System.out.println("Server: " + response);
+
+            if (userInput.equalsIgnoreCase("EXIT")) {
+                break;
+            }
+        }
+
+        scanner.close();
+        in.close();
+        out.close();
+        socket.close();
+    }
+}
