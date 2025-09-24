@@ -1,0 +1,156 @@
+import java.io.*;
+import java.net.*;
+import java.util.*;
+
+class Wallet {
+    private double balance;
+    private Set<String> subscriptions;
+
+    public Wallet() {
+        this.balance = 0.0;
+        this.subscriptions = new HashSet<>();
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void addMoney(double amount) {
+        if (amount > 0) {
+            this.balance += amount;
+        }
+    }
+
+    public boolean subscribe(String service, double cost) {
+        if (subscriptions.contains(service)) {
+            return false;
+        }
+        if (balance >= cost) {
+            balance -= cost;
+            subscriptions.add(service);
+            return true;
+        }
+        return false;
+    }
+
+    public String getSubscriptions() {
+        if (subscriptions.isEmpty()) return "No active subscriptions";
+        return subscriptions.toString();
+    }
+}
+
+public class SubscriptionServer {
+    private static Map<String, Wallet> userWallets = new HashMap<>();
+    private static Map<String, Double> services = new HashMap<>();
+
+    static {
+        services.put("Netflix", 499.0);
+        services.put("AmazonPrime", 299.0);
+        services.put("Disney+", 399.0);
+    }
+
+    public static void main(String[] args) throws IOException {
+        ServerSocket serverSocket = new ServerSocket(12345);
+        System.out.println("Server started. Waiting for clients...");
+        while (true) {
+            Socket clientSocket = serverSocket.accept();
+            System.out.println("Client connected: " + clientSocket.getInetAddress());
+
+            new Thread(() -> handleClient(clientSocket)).start();
+        }
+    }
+
+    private static void handleClient(Socket socket) {
+        try (
+            BufferedReader in = new BufferedReader(
+                new InputStreamReader(socket.getInputStream()));
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+        ) {
+            String inputLine;
+            out.println("Welcome to Subscription Server");
+            while ((inputLine = in.readLine()) != null) {
+                String response = processCommand(inputLine);
+                out.println(response);
+                if (inputLine.equalsIgnoreCase("exit")) {
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Client connection error: " + e.getMessage());
+        }
+    }
+
+    private static String processCommand(String command) {
+        // Commands format:
+        // ADD user amount
+        // SUBSCRIBE user service
+        // BALANCE user
+        // SUBSCRIPTIONS user
+        // exit
+
+        String[] parts = command.split(" ");
+        if (parts.length == 0) return "Invalid command";
+
+        String cmd = parts[0].toUpperCase();
+
+        switch (cmd) {
+            case "ADD":
+                if (parts.length != 3) return "Usage: ADD user amount";
+                return addMoney(parts[1], parts[2]);
+            case "SUBSCRIBE":
+                if (parts.length != 3) return "Usage: SUBSCRIBE user service";
+                return subscribe(parts[1], parts[2]);
+            case "BALANCE":
+                if (parts.length != 2) return "Usage: BALANCE user";
+                return getBalance(parts[1]);
+            case "SUBSCRIPTIONS":
+                if (parts.length != 2) return "Usage: SUBSCRIPTIONS user";
+                return getSubscriptions(parts[1]);
+            case "EXIT":
+                return "Goodbye!";
+            default:
+                return "Unknown command";
+        }
+    }
+
+    private static Wallet getOrCreateWallet(String user) {
+        return userWallets.computeIfAbsent(user, k -> new Wallet());
+    }
+
+    private static String addMoney(String user, String amountStr) {
+        try {
+            double amount = Double.parseDouble(amountStr);
+            if (amount <= 0) return "Amount must be positive";
+            Wallet wallet = getOrCreateWallet(user);
+            wallet.addMoney(amount);
+            return "Added ₹" + amount + " to " + user + "'s wallet.";
+        } catch (NumberFormatException e) {
+            return "Invalid amount";
+        }
+    }
+
+    private static String subscribe(String user, String service) {
+        Wallet wallet = getOrCreateWallet(user);
+        Double cost = services.get(service);
+        if (cost == null) return "Service not found";
+
+        boolean success = wallet.subscribe(service, cost);
+        if (success) {
+            return user + " subscribed to " + service + " for ₹" + cost;
+        } else {
+            return "Subscription failed (already subscribed or insufficient funds)";
+        }
+    }
+
+    private static String getBalance(String user) {
+        Wallet wallet = userWallets.get(user);
+        if (wallet == null) return "User not found";
+        return user + "'s balance: ₹" + wallet.getBalance();
+    }
+
+    private static String getSubscriptions(String user) {
+        Wallet wallet = userWallets.get(user);
+        if (wallet == null) return "User not found";
+        return user + "'s active subscriptions: " + wallet.getSubscriptions();
+    }
+}
