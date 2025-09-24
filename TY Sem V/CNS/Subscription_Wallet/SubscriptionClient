@@ -1,0 +1,76 @@
+import java.io.*;
+import java.net.*;
+import java.util.Scanner;
+
+public class SubscriptionClient {
+    public static void main(String[] args) {
+        String hostname = "localhost";
+        int port = 12345;
+
+        try (
+            Socket socket = new Socket(hostname, port);
+            BufferedReader in = new BufferedReader(
+                new InputStreamReader(socket.getInputStream()));
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            Scanner scanner = new Scanner(System.in);
+        ) {
+            // Print welcome message from server
+            System.out.println(in.readLine());
+
+            while (true) {
+                System.out.println("\nMenu:");
+                System.out.println("1. Add money");
+                System.out.println("2. Subscribe to service");
+                System.out.println("3. View balance");
+                System.out.println("4. View subscriptions");
+                System.out.println("5. Exit");
+                System.out.print("Enter choice: ");
+
+                String choice = scanner.nextLine();
+                String command = "";
+
+                switch (choice) {
+                    case "1":
+                        System.out.print("Enter user id: ");
+                        String userAdd = scanner.nextLine();
+                        System.out.print("Enter amount to add: ");
+                        String amount = scanner.nextLine();
+                        command = "ADD " + userAdd + " " + amount;
+                        break;
+                    case "2":
+                        System.out.print("Enter user id: ");
+                        String userSub = scanner.nextLine();
+                        System.out.print("Enter service name (Netflix/AmazonPrime/Disney+): ");
+                        String service = scanner.nextLine();
+                        command = "SUBSCRIBE " + userSub + " " + service;
+                        break;
+                    case "3":
+                        System.out.print("Enter user id: ");
+                        String userBal = scanner.nextLine();
+                        command = "BALANCE " + userBal;
+                        break;
+                    case "4":
+                        System.out.print("Enter user id: ");
+                        String userSubs = scanner.nextLine();
+                        command = "SUBSCRIPTIONS " + userSubs;
+                        break;
+                    case "5":
+                        command = "exit";
+                        out.println(command);
+                        System.out.println("Exiting...");
+                        return;
+                    default:
+                        System.out.println("Invalid choice. Try again.");
+                        continue;
+                }
+
+                out.println(command);
+                String response = in.readLine();
+                System.out.println("Server: " + response);
+            }
+
+        } catch (IOException e) {
+            System.out.println("Client error: " + e.getMessage());
+        }
+    }
+}
